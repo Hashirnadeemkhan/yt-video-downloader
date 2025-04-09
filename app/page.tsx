@@ -51,7 +51,7 @@ export default function Home() {
     setError("")
 
     try {
-      const result = await downloadVideo(url, videoInfo.title)
+      const result = await downloadVideo(url)
       if (!result) {
         setError("This is a demo. Actual downloading requires a full server environment.")
       }

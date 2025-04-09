@@ -20,7 +20,7 @@ export async function getVideoInfo(url: string) {
     }
   }
   
-  export async function downloadVideo(url: string, ) {
+  export async function downloadVideoA(url: string, ) {
     try {
       const response = await fetch("/api/download", {
         method: "POST",
