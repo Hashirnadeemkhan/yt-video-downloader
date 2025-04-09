@@ -1,4 +1,11 @@
-export async function getVideoInfo(url: string) {
+interface VideoInfo {
+    title: string
+    thumbnail: string
+    duration: string
+    author: string
+  }
+  
+  export async function getVideoInfo(url: string): Promise<VideoInfo> {
     try {
       const response = await fetch("/api/video-info", {
         method: "POST",
@@ -20,7 +27,7 @@ export async function getVideoInfo(url: string) {
     }
   }
   
-  export async function downloadVideoA(url: string, ) {
+  export async function downloadVideo(url: string): Promise<boolean> {
     try {
       const response = await fetch("/api/download", {
         method: "POST",
@@ -37,25 +44,10 @@ export async function getVideoInfo(url: string) {
   
       const data = await response.json()
   
-      // If we have a message, it means we're in demo mode
       if (data.message) {
         alert(data.message)
         return false
       }
-  
-      // In a real application with a proper server environment:
-      // Create a blob from the response
-      // const blob = await response.blob()
-      // Create a download link and trigger it
-      // const downloadUrl = window.URL.createObjectURL(blob)
-      // const a = document.createElement("a")
-      // a.href = downloadUrl
-      // a.download = `${title.replace(/[^\w\s]/gi, "")}.mp4`
-      // document.body.appendChild(a)
-      // a.click()
-      // Clean up
-      // window.URL.revokeObjectURL(downloadUrl)
-      // document.body.removeChild(a)
   
       return true
     } catch (error) {
@@ -63,4 +55,3 @@ export async function getVideoInfo(url: string) {
       throw error
     }
   }
-  

@@ -1,14 +1,13 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import { Download, Loader2, Youtube } from "lucide-react"
 import Image from "next/image"
-
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
+import { downloadVideo, getVideoInfo } from "@/lib/youtube" // Importing from lib/youtube
 
 interface VideoInfo {
   title: string
@@ -26,7 +25,6 @@ export default function Home() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
     if (!url) return
 
     setLoading(true)
@@ -108,7 +106,7 @@ export default function Home() {
                   <div className="sm:w-1/3 relative rounded-lg overflow-hidden">
                     {videoInfo.thumbnail ? (
                       <Image
-                        src={videoInfo.thumbnail || "/placeholder.svg"}
+                        src={videoInfo.thumbnail}
                         alt={videoInfo.title}
                         width={500}
                         height={500}
