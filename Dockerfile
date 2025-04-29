@@ -1,37 +1,23 @@
-# # 1. Base image lo (Python ka light weight version)
-# FROM python:3.11-slim
+# Use an official Python runtime as the base image
+FROM python:3.10-slim
 
-# # 2. Working directory set karo container ke andar
-# WORKDIR /app
-
-# # 3. Local files copy karo container ke andar
-# COPY . /app
-
-# # 4. Flask aur dusre dependencies install karo
-# RUN pip install --no-cache-dir -r requirements.txt
-
-# # 5. Expose port 5000 (jisme Flask app chalega)
-# EXPOSE 5000
-
-# # 6. Jab container run ho to app.py start karo
-# CMD ["python", "app.py"]
-# Use an official Python runtime as a parent image
-FROM python:3.9-slim
-
-# Set the working directory in the container
+# Set working directory in the container
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . /app
+# Install system dependencies (ffmpeg for yt-dlp)
+RUN apt-get update && apt-get install -y ffmpeg && rm -rf /var/lib/apt/lists/*
 
-# Install any needed packages specified in requirements.txt
+# Copy the requirements file first (for dependency caching)
+COPY requirements.txt .
+
+# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
+# Copy the rest of the application code
+COPY . .
 
-# Define environment variable
-ENV FLASK_APP=app.py
+# Expose the port FastAPI will run on
+EXPOSE 8000
 
-# Run Flask app
-CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+# Command to run the FastAPI app with uvicorn
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
